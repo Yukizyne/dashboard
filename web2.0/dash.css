@@ -92,10 +92,11 @@ section{
     position: relative;
     height: 100vh;
     width: 100%;
-    background-image: linear-gradient(to left, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url(image/background.jpg);
+    background-image: linear-gradient(to left, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url(image/bak.jpg);
     background-size: cover;
     background-position: bottom center;
     display: flex;
+    background-position: center;
     align-items: center;
     justify-content: flex-start;
 }
@@ -143,28 +144,124 @@ header.sticky{
     background: transparent;
     backdrop-filter: blur(35px);
 }
-.feature-content{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, auto));
-    align-items: center;
+.heading{
     text-align: center;
-    gap: 3rem;
 }
-.row-img{
+.heading span{
+    font-weight: 500;
+    color: var(--main-color);
+}
+.heading p{
+    font-size: 0.938rem;
+    font-weight: 300;
+}
+.cars-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+.cars-container .box{
+    flex: 1 1 17rem;
+    position: relative;
+    height: 200px;
+    border-radius: 0.5rem;
     overflow: hidden;
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-    margin-bottom: 20px;
-    border-radius: 50%;
-    cursor: pointer;
 }
-.row-img img{
+.cars-container .box img{
     width: 100%;
-    display: block;
-    margin-top: 20px;
-    transition: transform 0.7s;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
 }
-.row-img img:hover{
-    transform: scale(1.2);
+.cars-container .box img:hover{
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+.cars-container .box h2{
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-weight: 400;
+    font-size: 1rem;
+    background: var(--bg-color);
+    padding: 8px;
+    border-radius: 0.5rem;
+}
+.about{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+}
+.about-img{
+    flex: 1 1 21rem;
+}
+.about-text{
+    flex: 1 1 21rem;
+}
+.about-text span{
+    font-weight: 500;
+    color: var(--main-color);
+}
+.about-text h2{
+    font-size: 1.7rem;
+}
+.about-text p{
+    font-size: 0.938rem;
+    margin: 0.5rem 0 1.4rem;
+}
+.parts-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+.parts-container .box{
+    flex: 1 1 17rem;
+    position: relative;
+    padding: 20px;
+    display: flex;
+    background: white;
+    flex-direction: column;
+
+    border-radius: 0.5rem;
+}
+.parts-container .box img{
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    object-position: center;
+    margin-bottom: 1rem;
+}
+.parts-container .box h3{
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.parts-container .box p{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--main-color);
+    margin: 0.8rem 0;
+}
+.parts-container .box .btn{
+    max-width: 120px;
+    color: #000;
+}
+.parts-container .box .btn:hover{
+    background: black;
+    color: var(--main-color);
+}
+.parts-container .box .details{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 1.8rem;
+    right: 1rem;
+    font-size: 1rem;
+    color: var(--main-color);
+}
+.parts-container .box .details:hover{
+    color: black;
+    text-decoration: underline;
 }
