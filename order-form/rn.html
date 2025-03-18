@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+        }
+        body{
+            background: lightgray;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            height: 100vh;
+            text-align: center;
+        }
+        .container{
+            background: white;
+            width: 400px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 4px 2px grey;
+            text-align: center;
+        }
+        h2{
+            color: green;
+        }
+        label{
+            font-weight: bold;
+            display: block;
+            margin-top: 20px;
+        }
+        select, input{
+            width: 100%;
+            padding: 7px;
+            margin-top: 4px;
+            border-radius: 8px;
+            outline: none;
+            border: 1px solid black;
+            transition: .5s;
+        }
+        select:focus, input:focus{
+            background: lightblue;
+        }
+        button{
+            background: lightblue;
+            color: black;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            font-size: 15px;
+            transition: .5s ease;
+        }
+        button:hover{
+            background: black;
+            color: white;
+        }
+        .receipt{
+            margin-top: 20px;
+            border-top: 2px dashed black;
+            padding-top: 15px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    <div class="container">
+        <h2>Order Now</h2>
+        <form id="form">
+            <label for="food">Food:</label>
+            <select id="food" name="food">
+                <option value="Adobo" data-price="45">ADOBO - ₱45</option>
+                <option value="Sinigang" data-price="45">SINIGANG - ₱35</option>
+                <option value="Dinuguan" data-price="45">DINUGUAN - ₱40</option>
+                <option value="Pakbet" data-price="45">PAKBET - ₱30</option>
+                <option value="Fried Chicken" data-price="45">FRIED CHICKEN - ₱70</option>
+            </select><br>
+            <label for="drink">Drink:</label>
+            <select id="drink" name="drink">
+                <option value="Water" data-price="20">WATER - ₱20</option>
+                <option value="Coke" data-price="22">COKE - ₱22</option>
+                <option value="Royal" data-price="22">ROYAL - ₱22</option>
+                <option value="Mountain Dew" data-price="25">MOUNTAIN DEW - ₱25</option>
+                <option value="Ice Tea" data-price="30">ICE TEA - ₱30</option>
+            </select><br>
+            <label for="fruit">Fruit:</label>
+            <select id="fruit" name="fruit">
+                <option value="Apple" data-price="120">APPLE - ₱120</option>
+                <option value="Mango" data-price="220">MANGO - ₱220</option>
+                <option value="Guava" data-price="150">GUAVA - ₱150</option>
+                <option value="Banana" data-price="125">BANANA - ₱125</option>
+                <option value="Orange" data-price="130">ORANGE - ₱130</option>
+            </select><br>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" id="quantity" min="1" value="1">
+
+            <div id="totalDisplay"><strong>Total Price</strong>₱0:</div><br>
+
+            <label for="payment">Payment (₱):</label>
+            <input type="number" name="payment" id="payment" min="1" value="0" disabled>
+
+            <button type="submit" onclick="submitOrder()">Process</button>
+        </form>
+        <div class="receipt" id="receipt"></div>
+    </div>
+
+    <script>
+       document.getElementById("food").addEventListener("change", totalPrice);
+       document.getElementById("drink").addEventListener("change", totalPrice);
+       document.getElementById("fruit").addEventListener("change", totalPrice);
+       document.getElementById("quantity").addEventListener("input", totalPrice);
+
+       function totalPrice(){
+        let food = document.getElementById("food");
+        let drink = document.getElementById("drink");
+        let fruit = document.getElementById("fruit");
+        let quantity = parseInt(document.getElementById("quantity").value);
+
+        let foodPrice = parseInt(food.options[food.selectedIndex].dataset.price);
+        let drinkPrice = parseInt(drink.options[drink.selectedIndex].dataset.price);
+        let fruitPrice = parseInt(fruit.options[fruit.selectedIndex].dataset.price);
+        let total = (foodPrice + drinkPrice + fruitPrice) * quantity;
+
+        document.getElementById("totalDisplay").innerHTML = `<strong>Total Price:</strong> ₱${total}`;
+        document.getElementById("payment").disabled = false;
+        document.getElementById("payment").value = "";
+       }
+       function validpayment(){
+            let payment = parseInt(document.getElementById("payment").value);
+            if(isNaN(payment) || payment <=0){
+                document.getElementById("payment").value ="";
+            }
+        }
+
+        function submitOrder(){
+            event.preventDefault();
+            let food = document.getElementById("food").value;
+            let drink = document.getElementById("drink").value;
+            let fruit = document.getElementById("fruit").value;
+            let quantity = parseInt(document.getElementById("quantity").value);
+            let payment = parseInt(document.getElementById("payment").value);
+
+            let foodPrice = parseInt(document.getElementById("food")
+            .options[document.getElementById("food").selectedIndex].dataset.price);
+
+            let drinkPrice = parseInt(document.getElementById("drink")
+            .options[document.getElementById("drink").selectedIndex].dataset.price);
+
+            let fruitPrice = parseInt(document.getElementById("fruit")
+            .options[document.getElementById("fruit").selectedIndex].dataset.price);
+
+            let total = (foodPrice + drinkPrice + fruitPrice) * quantity;
+
+            if(isNaN(payment) || payment < total){
+                alert("not enough money");
+                return;
+            }
+
+            let change = payment - total;
+            let receipt = `
+            <p><strong>Food:</strong>${food} - ${foodPrice}</p>
+            <p><strong>Drink:</strong>${drink} - ${drinkPrice}</p>
+            <p><strong>Fruit:</strong>${fruit} - ${fruitPrice}</p>
+            <p><strong>Quantity:</strong>${quantity}</p>
+            <p><strong>Total Price:</strong>${total}</p>
+            <p><strong>Payment:</strong>${payment}</p>
+            <p><strong>Change:</strong>${change}</p>
+
+            `;
+            document.getElementById("receipt").innerHTML = receipt;
+        }
+       
+    </script>
+</body>
+</html>

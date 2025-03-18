@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        body{
+            background: lightblue;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            height: 100vh;
+            text-align: center;
+        }
+        .container{
+            background: white;
+            width: 400px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 5px black;
+            text-align: center;
+        }
+        h2{
+            color: green;
+        }
+        label{
+            font-weight: bold;
+            display: block;
+            margin-top: 20px;
+        }
+        select, input{
+            width: 100%;
+            padding: 8px;
+            margin-top: 20px;
+            border-radius: 9px;
+            outline: none;
+            border: 1px solid black;
+            transition: .5s;
+        }
+        select:focus, input:focus{
+            background: lightcyan;
+        }
+        button{
+            width: 100%;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: green;
+            cursor: pointer;
+            transition: .5s;
+        }
+        button:hover{
+            background: grey;
+            
+        }
+        .receipt{
+            margin-top: 20px;
+            border-top: 2px dashed black;
+            padding-top: 15px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    <div class="container">
+        <h2>Order Here!</h2>
+        <form id="form">
+            <label for="food">Food:</label>
+            <select id="food">
+                <option value="Adobo" data-price="30">ADOBO - ₱30</option>
+                <option value="Sinigang" data-price="30">SINIGANG - ₱30</option>
+                <option value="PorkChop" data-price="40">PORKCHOP - ₱40</option>
+                <option value="Chicken" data-price="20">CHICKEN - ₱20</option>
+                <option value="Ampalaya" data-price="35">AMPALAYA - ₱35</option>
+            </select><br>
+            <label for="drink">Drink:</label>
+            <select id="drink">
+                <option value="Royal" data-price="30">ROYAL - ₱30</option>
+                <option value="Coke" data-price="30">COKE - ₱30</option>
+                <option value="Sting" data-price="40">STING - ₱40</option>
+                <option value="C2" data-price="20">C2 - ₱20</option>
+                <option value="MountainDew" data-price="35">MOUNTAIN DEW - ₱35</option>
+            </select><br>
+            <label for="desert">Desert:</label>
+            <select id="desert">
+                <option value="Apple Pie" data-price="330">Apple Pie - ₱330</option>
+                <option value="Brownies" data-price="430">Brownies - ₱430</option>
+                <option value="CheeseCake" data-price="540">CheeseCake - ₱540</option>
+                <option value="FruitSalad" data-price="320">FruitSalad - ₱320</option>
+                <option value="IceCream" data-price="135">IceCream - ₱135</option>
+            </select><br>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" id="quantity" min="1" value="1">
+
+            <div id="totalDisplay"><strong>Total Price</strong>(₱):</div>
+
+            <label for="payment">Payment:</label>
+            <input type="number" name="payment" id="payment" min="1" value="0" disabled>
+
+            <button type="submit" onclick="submitOrder()">Submit Order</button>
+        </form>
+        <div class="receipt" id="receipt"></div>
+    </div>
+    <script>
+        document.getElementById("food").addEventListener("change", totalPrice);
+        document.getElementById("drink").addEventListener("change", totalPrice);
+        document.getElementById("desert").addEventListener("change", totalPrice);
+        document.getElementById("quantity").addEventListener("input", totalPrice);
+
+        function totalPrice(){
+            let food = document.getElementById("food");
+            let drink = document.getElementById("drink");
+            let desert = document.getElementById("desert");
+            let quantity = parseInt(document.getElementById("quantity").value);
+
+            let foodPrice = parseInt(food.options[food.selectedIndex].dataset.price);
+            let drinkPrice = parseInt(drink.options[drink.selectedIndex].dataset.price);
+            let desertPrice = parseInt(desert.options[desert.selectedIndex].dataset.price);
+
+            let total = (foodPrice + drinkPrice + desertPrice) * quantity;
+            document.getElementById("totalDisplay").innerHTML = `<strong>Total Price:</strong> ${total}`;
+            document.getElementById("payment").disabled = false;
+            document.getElementById("payment").value ="";
+        }
+        function payments(){
+            if(isNaN(payment) || payment < 0){
+                document.getElementById("payment").value ="";
+            }
+        }
+
+        function submitOrder(){
+            event.preventDefault();
+            let food = document.getElementById("food").value;
+            let drink = document.getElementById("drink").value;
+            let desert = document.getElementById("desert").value;
+            let quantity = parseInt(document.getElementById("quantity").value);
+            let payment = parseInt(document.getElementById("payment").value);
+
+            let foodPrice = parseInt(document.getElementById("food")
+            .options[document.getElementById("food").selectedIndex].dataset.price);
+
+            let drinkPrice = parseInt(document.getElementById("drink")
+            .options[document.getElementById("drink").selectedIndex].dataset.price);
+
+            let desertPrice = parseInt(document.getElementById("desert")
+            .options[document.getElementById("desert").selectedIndex].dataset.price);
+
+            let total = (foodPrice + drinkPrice + desertPrice) * quantity;
+
+            if(isNaN(payment) || payment < total){
+                alert("Not enough money");
+                return;
+            }
+
+            let change = payment - total;
+            let receipt = `
+            <p><strong>Your Order:</strong></p>
+            <p><strong>Food:</strong> ${food} - ${foodPrice}</p>
+            <p><strong>Drink:</strong> ${drink} - ${drinkPrice}</p>
+            <p><strong>Desert:</strong> ${desert} - ${desertPrice}</p>
+             <p><strong>Total:</strong>- ${total}</p>
+             <p><strong>Quantity:</strong>- ${quantity}</p>
+             <p><strong>Payment:</strong>- ${payment}</p>
+             <p><strong>Change:</strong>- ${change}</p>
+            `;
+
+            document.getElementById("receipt").innerHTML = receipt;
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TINDAHAN NI ALING MARIKIT</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: grey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    
+        .container {
+            background: #ffffff;
+            width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    
+        h2 {
+            color: #d63384;
+        }
+    
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+    
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: 0.3s;
+        }
+    
+        select:focus, input:focus {
+            border-color: #d63384;
+        }
+    
+        button {
+            background: #d63384;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            font-size: 16px;
+            transition: 0.5s;
+        }
+    
+        button:hover {
+            background: #a32062;
+        }
+    
+        .receipt {
+            margin-top: 20px;
+            border-top: 2px dashed #d63384;
+            padding-top: 15px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Order Now</h2>
+    <form id="orderForm">
+        <label for="food">Food:</label>
+        <select id="food" name="food">
+            <option value="Burger" data-price="50">Burger - ₱50</option>
+            <option value="Pizza" data-price="100">Pizza - ₱100</option>
+            <option value="Hotdog" data-price="40">Hotdog - ₱40</option>
+            <option value="Siomai-Rice" data-price="40">Siomai-Rice -₱40</option>
+        </select><br><br>
+
+        <label for="drink">Drink:</label>
+        <select id="drink" name="drink">
+            <option value="Coke" data-price="30">Coke - ₱30</option>
+            <option value="Pepsi" data-price="30">Pepsi - ₱30</option>
+            <option value="Water" data-price="20">Water - ₱20</option>
+            <option value="Sting" data-price="25">Sting - ₱25</option>
+        </select><br><br>
+        <label for="food">Fruit:</label>
+        <select id="fruit" name="fruit">
+            <option value="Apple" data-price="120">Apple - ₱120</option>
+            <option value="Orange" data-price="130">Orange - ₱130</option>
+            <option value="Grape" data-price="150">Grape - ₱150</option>
+            <option value="Mango" data-price="125">Mango - ₱125</option>
+        </select><br><br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" value="1"><br><br>
+
+        <div id="totalDisplay"><strong>Total Price:</strong> ₱0</div><br>
+
+        <label for="payment">Payment (₱):</label>
+        <input type="number" id="payment" name="payment" min="1" value="0" disabled><br><br>
+
+        <button type="button" onclick="submitOrder()">Submit Order</button>
+    </form>
+
+    <div class="receipt" id="receipt">
+
+    </div>
+</div>
+     <script>
+        document.getElementById("food").addEventListener("change", totalPrice);
+        document.getElementById("drink").addEventListener("change", totalPrice);
+        document.getElementById("fruit").addEventListener("change", totalPrice);
+        document.getElementById("quantity").addEventListener("input", totalPrice);
+
+    function totalPrice() {
+        let food = document.getElementById("food");
+        let drink = document.getElementById("drink");
+        let fruit = document.getElementById("fruit");
+        let quantity = parseInt(document.getElementById("quantity").value);
+
+        let foodPrice = parseInt(food.options[food.selectedIndex].dataset.price);
+        let drinkPrice = parseInt(drink.options[drink.selectedIndex].dataset.price);
+        let fruitPrice = parseInt(fruit.options[fruit.selectedIndex].dataset.price);
+
+        let total = (foodPrice + drinkPrice + fruitPrice) * quantity;
+
+        document.getElementById("totalDisplay").innerHTML = `<strong>Total Price:</strong> ₱${total}`;
+        document.getElementById("payment").disabled = false; 
+        document.getElementById("payment").value = ""; 
+}
+
+    function validpayment() {
+        let payment = parseInt(document.getElementById("payment").value);
+        if (isNaN(payment) || payment <= 0) {
+        document.getElementById("payment").value = "";
+        }
+    }
+
+    function submitOrder(){
+        let food = document.getElementById("food").value;
+        let drink = document.getElementById("drink").value;
+        let fruit = document.getElementById("fruit").value;
+        let quantity = parseInt(document.getElementById("quantity").value);
+        let payment = parseInt(document.getElementById("payment").value);
+
+        let foodPrice = parseInt(document.getElementById("food")
+        .options[document.getElementById("food").selectedIndex].dataset.price);
+
+        let drinkPrice = parseInt(document.getElementById("drink")
+        .options[document.getElementById("drink").selectedIndex].dataset.price);
+
+        let fruitPrice = parseInt(document.getElementById("fruit")
+        .options[document.getElementById("fruit").selectedIndex].dataset.price);
+        
+        let total = (foodPrice + drinkPrice + fruitPrice) * quantity;
+
+        if(isNaN(payment) || payment < total){
+            alert("Not enough money");
+            return;
+        }
+         let change = payment - total;
+         let receipt = `
+         <h3>Receipt:</h3>
+         <p><strong>Food:</strong>${food} - ${foodPrice}</p>
+         <p><strong>Drink:</strong>${drink} - ${drinkPrice}</p>
+         <p><strong>Fruit:</Strong>${fruit} - ${fruitPrice}</p>
+         <p><strong>Total Price:</strong>${total}</p> 
+         <p><strong>Payment:</strong>${payment}</p> 
+         <p><strong>Change:</strong>${change}</p> 
+         <p><strong>Thank Have a nice day!</strong></p>
+         `;
+         document.getElementById("receipt").innerHTML = receipt;
+    }
+
+     </script>
+</body>
+</html>
